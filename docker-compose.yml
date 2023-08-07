@@ -9,12 +9,14 @@ services: #애플리케이션의 컨테이너를 정의하는 섹션
       dockerfile: Dockerfile
     image: lion-app #도커 이미지 이름 정의
     ports: #컨테이너가 사용할 포트와 호스트에서 사용할 포트 지정
-      - "8000:8000"
+      - 8000:8000
     volumes:
       - ./lion_app:/app
       - "staticfiles:/var/www/html/static"
     command:
       - "/start"
+    env_file:
+      - ./prod.env
 
   # nginx
   nginx:
@@ -29,6 +31,8 @@ services: #애플리케이션의 컨테이너를 정의하는 섹션
       - "8888:80"
     volumes:
       - "staticfiles:/var/www/html/static"
+    env_file:
+      - ./prod.env
 
 volumes:
   staticfiles:
