@@ -28,7 +28,7 @@ DEBUG = True
 
 LOCAL_IP = os.getenv('LOCAL_IP','')
 
-ALLOWED_HOSTS = [LOCAL_IP,"localhost","127.0.0.1"]
+ALLOWED_HOSTS = [LOCAL_IP,"localhost",]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8888",
