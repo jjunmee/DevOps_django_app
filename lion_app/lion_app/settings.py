@@ -25,12 +25,14 @@ SECRET_KEY = 'django-insecure-1t6fj()ecs#36eb-ioj8nu$wo3+e0#s@idb-z!^%k8@)%c-n(8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["223.130.136.27","175.106.97.214","localhost","127.0.0.1"]
+LOCAL_IP = os.getenv('LOCAL_IP','')
+
+ALLOWED_HOSTS = [LOCAL_IP,"localhost","127.0.0.1"]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8888",
+    "http://{LOCAL_IP}:8888",
 ]
-
 
 
 # Application definition
