@@ -1,14 +1,13 @@
-version: '3' #compose 파일버전
+version: '3'
 
-services: #애플리케이션의 컨테이너를 정의하는 섹션
-  # django app
+services:
   lion-app:
-    container_name: lion-app-dc #컨테이너의 이름을 정의
-    build: #Dockerfile을 사용하여 이미지를 빌드
-      context: lion_app #이미지 위치지정
+    container_name: lion-app-dc
+    build:
+      context: lion_app
       dockerfile: Dockerfile
-    image: lion-app #도커 이미지 이름 정의
-    ports: #컨테이너가 사용할 포트와 호스트에서 사용할 포트 지정
+    image: lion-app
+    ports:
       - 8000:8000
     volumes:
       - ./lion_app:/app
@@ -16,9 +15,10 @@ services: #애플리케이션의 컨테이너를 정의하는 섹션
     command:
       - "/start"
     env_file:
-      - ./prod.env
+      - ./.envs/prod/django
+      - ./.envs/prod/db
+      - ./.envs/prod/server
 
-  # nginx
   nginx:
     depends_on:
       - lion-app
@@ -32,7 +32,7 @@ services: #애플리케이션의 컨테이너를 정의하는 섹션
     volumes:
       - "staticfiles:/var/www/html/static"
     env_file:
-      - ./prod.env
+      - ./.envs/prod/server
 
 volumes:
   staticfiles:

@@ -1,5 +1,5 @@
 #FROM python:3.9.6-slim
-FROM python:3.9.6-alpine
+FROM python:3.11-alpine
 
 ARG APP_HOME=/app
 
@@ -17,10 +17,14 @@ COPY ./scripts/start /start
 RUN sed -i 's/\r$//g' /start
 RUN chmod +x /start
 
+COPY ./scripts/entrypoint /entrypoint
+RUN sed -i 's/\r$//g' /entrypoint
+RUN chmod +x /entrypoint
+
 WORKDIR ${APP_HOME}
 
 RUN if [-e /var/www/html/static ]; then rm -rf /var/www/html/static; fi
 RUN python manage.py collectstatic -c
 
-
+ENTRYPOINT [ "/entrypoint" ]
 CMD [ "python", "--version" ]

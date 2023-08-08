@@ -28,11 +28,14 @@ DEBUG = True
 
 LOCAL_IP = os.getenv('LOCAL_IP','')
 
-ALLOWED_HOSTS = [LOCAL_IP,"localhost",]
+ALLOWED_HOSTS = [
+    "localhost",
+    LOCAL_IP,
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8888",
-    "http://{LOCAL_IP}:8888",
+    f"http://{LOCAL_IP}:8888",
 ]
 
 
@@ -91,8 +94,11 @@ WSGI_APPLICATION = 'lion_app.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'db'),
     }
 }
 
