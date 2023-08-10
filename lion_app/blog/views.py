@@ -1,13 +1,8 @@
-from pymongo import MongoClient
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import status
 
 from .serializers import BlogSerializer
-
-
-client = MongoClient(host="mongo")
-db = client.likelion
 
 
 class BlogViewSet(ViewSet):
