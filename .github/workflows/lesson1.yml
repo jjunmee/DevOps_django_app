@@ -1,8 +1,7 @@
 name: lesson1
 
 on:
-    push:
-    pull_request:
+    workflow_dispatch:
 
 jobs:
     echo-event:
@@ -11,19 +10,43 @@ jobs:
         steps:
             - name: get event
               run: echo "This event is ${{github.event_name}}"
-            #   run: echo "This event is $GITHUB_EVENT_NAME"
-            - name: echo github context
-              run: echo "${{github.repositoryUrl}}"
-            - name: list files
-              run: ls -al
 
-    docker-compose-build:
-        name: docker compose build
+    docker-build:
+        name: docker build
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
-            - name: list files
-              run: ls -al
-            - name: build
-              run: docker-compose build
-              
+            - name: Set up Docker buildx
+              uses: docker/setup-buildx-action@v2
+            - name: Build and Export
+              uses: docker/build-push-action@v4
+              with:
+                context: lion_app
+                tags: lion-app:latest
+                outputs: type=docker,dest=/tmp/lion_app.tar
+            - name: upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: lion-app
+                path: /tmp/lion_app.tar
+            - name: docker images
+              if: ${{ always() }}
+              run: | 
+                docker load --input /tmp/lion_app.tar
+                docker images lion-app
+            
+    docker-images:
+        if: ${{ always() }}
+        needs: docker-build
+        name: docker images
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download artifact
+              uses: actions/download-artifact@v3
+              with:
+                name: lion-app
+                path: /tmp
+            - name: Load image
+              run: docker load --input /tmp/lion_app.tar
+            - name: docker images
+              run: docker images lion-app
