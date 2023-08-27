@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "docker" {
-    
+#    host    = "npipe:////.//pipe//docker_engine" # for windows
 }
 
 resource "docker_image" "nginx" {

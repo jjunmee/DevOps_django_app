@@ -3,8 +3,8 @@
 USERNAME="lion"
 PASSWORD=
 
-# getopts로 전달 받아서 작업 수행
-while getopts "u:p:" opt; do
+# getopts 로 전달 받아서 작업 수행
+while getops "u:p:" opt; do
     case $opt in
         u) 
             USERNAME=$OPTARG
@@ -12,7 +12,7 @@ while getopts "u:p:" opt; do
         p) 
             PASSWORD=$OPTARG
             ;;
-        *)
+        *) 
             echo "Usage: $0 [-u username] [-p password]"
             exit 1
             ;;
@@ -25,7 +25,6 @@ if [ -z $PASSWORD ]; then
     exit 1
 fi
 
-
 # user 추가
 echo "Add user"
 useradd -s /bin/bash -d /home/$USERNAME -m $USERNAME
@@ -34,6 +33,6 @@ useradd -s /bin/bash -d /home/$USERNAME -m $USERNAME
 echo "Set password"
 echo "$USERNAME:$PASSWORD" | chpasswd
 
-# suboer에 추가
+# sudoer에 추가
 echo "Add sudoer"
-echo "$USERNAME ALL=(ALL:ALL) ALL" >> /etc/sudoers.d/$USERNAME
+echo "$USERNAME ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers.d/$USERNAME
